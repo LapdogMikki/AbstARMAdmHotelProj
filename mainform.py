@@ -1,5 +1,7 @@
+
 import tkinter as tkntr
 import tkinter.ttk as tkttk
+
 import _dbconnect as dbcon
 import _Components as comp
 
@@ -8,6 +10,7 @@ def main():
     root.title("АРМ администратора")
     note = tkttk.Notebook(root)
     brn = comp.MFormTabFrame(root,headings=('Номер','Клиент','Дата заселения','Дата выселения'),rows=dbcon.showtabbron())
+    brn.create_btns(4)
     note.add(brn, text = "Бронирование номеров")
     kli = comp.MFormTabFrame(root,headings=('ФИО','Телефон','Гражданство','Уд.личности','Серия','Номер','Виза (п.н)','Дата нач.действия','Дата оконч.действия'),rows=dbcon.showtabkli())
     note.add(kli, text = "Клиенты")
