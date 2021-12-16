@@ -45,7 +45,7 @@ class MFormTabFrame(tkntr.Frame):
         
 def create_btns(frame,g):
     btns=[]
-    listhdbtns=['Добавить','Сохранить','Удалить','Отмена','Поиск','Обновление']
+    listhdbtns=['Добавить','Изменить','Удалить','Запрос']
     for i in range(0,g):
         btns.append(tkntr.Button(frame,text=listhdbtns[i])) 
     for btn in btns:
