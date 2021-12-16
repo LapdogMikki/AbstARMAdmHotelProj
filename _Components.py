@@ -1,9 +1,9 @@
 import tkinter as tkntr
 from tkinter.constants import HORIZONTAL
 import tkinter.ttk as tkttk
-
+import _dbconnect as dbcon
 class MFormTabFrame(tkntr.Frame):
-    def __init__(self,parent,headings=tuple(), rows=tuple(),hb=int(),he=int(),btns=list(),lbls=list(),empts=list()):
+    def __init__(self,parent,headings=tuple(), rows=tuple(),hb=int(),hcbx=int(),he=int(),btns=list(),lbls=list(),cbbxs=list(),empts=list()):
         tkntr.Frame.__init__(self,parent,background="white")
         self.parent = parent
         tablecomps=tkntr.Frame(self,background="white")
@@ -31,15 +31,15 @@ class MFormTabFrame(tkntr.Frame):
         self.btns=btns
         lbls=create_lbls(lblframe,headings)
         self.lbls=lbls
+        cbbxs=create_cbbxs(emptsframe,hcbx,headings)
+        self.cbbxs=cbbxs
         empts=create_txts(emptsframe,he)
-        self.empts=empts
+        self.empts=empts       
         btnframe.pack(anchor=tkntr.N,fill=tkntr.BOTH)
         lblframe.pack(side=tkntr.LEFT,anchor=tkntr.SE,fill=tkntr.BOTH)
         emptsframe.pack(side=tkntr.RIGHT,anchor=tkntr.SW,fill=tkntr.BOTH)
         datecomps.pack(fill=tkntr.BOTH)
-        self.initUI() 
-            
-                   
+        self.initUI()
     def initUI(self):
         self.pack(fill=tkntr.BOTH,expand=1) 
         
@@ -66,3 +66,14 @@ def create_txts(frame,g):
     for entr in entrs:
         entr.pack(side=tkntr.TOP,anchor=tkntr.S,padx=180,ipadx=150,pady=4) 
     return entrs 
+def create_cbbxs(frame,g,lheadings):
+    cbbxs=[]
+    vls=[]
+    if (lheadings[0]=='Номер'):vls.append(dbcon.cbx_selectnmrs())
+    elif (lheadings[0]=='Услуга'):vls.append(dbcon.cbx_selectuslgs())
+    vls.append(dbcon.cbx_selectklts())
+    for i in range(0,g):
+        cbbxs.append(tkttk.Combobox(frame,values=vls[i])) 
+    for cbbx in cbbxs:
+        cbbx.pack(side=tkntr.TOP,anchor=tkntr.S,padx=180,ipadx=150,pady=4) 
+    return cbbxs 

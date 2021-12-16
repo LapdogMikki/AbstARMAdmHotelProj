@@ -44,3 +44,27 @@ def showtabokusl():
     crs.execute("SELECT uslugs.name_usluga,client.FIO,ispolz_uslug.kol_vo,ispolz_uslug.date_usg,ispolz_uslug.price FROM client,uslugs,ispolz_uslug WHERE client.id_klient=ispolz_uslug.id_client and uslugs.id_usluga=ispolz_uslug.id_usluga")
     data=(row for row in crs.fetchall()) 
     return data 
+def cbx_selectklts():
+    con=connectDB()
+    crs=con.cursor()
+    crs.execute("SELECT FIO FROM client")
+    data=[]
+    for row in crs.fetchall():
+        data.append(row[0])
+    return data
+def cbx_selectnmrs():
+    con=connectDB()
+    crs=con.cursor()
+    crs.execute("SELECT nmb_room FROM rooms")
+    data=[]
+    for row in crs.fetchall():
+        data.append(row[0])
+    return data
+def cbx_selectuslgs():
+    con=connectDB()
+    crs=con.cursor()
+    crs.execute("SELECT name_usluga FROM uslugs")
+    data=[]   
+    for row in crs.fetchall():
+        data.append(row[0])
+    return data
