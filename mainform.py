@@ -1,5 +1,6 @@
 
 import tkinter as tkntr
+from tkinter.constants import COMMAND
 import tkinter.ttk as tkttk
 
 import _dbconnect as dbcon
@@ -27,7 +28,6 @@ def main():
     note.add(okusl, text = "Оказанные услуги")
     note.pack()
     root.mainloop()
-    
 
 if __name__=='__main__':
     main()

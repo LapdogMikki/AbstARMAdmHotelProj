@@ -1,5 +1,5 @@
 import tkinter as tkntr
-from tkinter.constants import HORIZONTAL
+from tkinter.constants import COMMAND, HORIZONTAL
 import tkinter.ttk as tkttk
 import _dbconnect as dbcon
 class MFormTabFrame(tkntr.Frame):
@@ -27,7 +27,7 @@ class MFormTabFrame(tkntr.Frame):
         btnframe=tkntr.Frame(datecomps,background="white")
         lblframe=tkntr.Frame(datecomps,background="white")
         emptsframe=tkntr.Frame(datecomps,background="white")
-        btns=create_btns(btnframe,hb)
+        btns=create_btns(btnframe,hb,table)
         self.btns=btns
         lbls=create_lbls(lblframe,headings)
         self.lbls=lbls
@@ -43,14 +43,16 @@ class MFormTabFrame(tkntr.Frame):
     def initUI(self):
         self.pack(fill=tkntr.BOTH,expand=1) 
         
-def create_btns(frame,g):
+def create_btns(frame,g,ttable):
     btns=[]
     funcbuttons=[]
+    funcbuttons.append(dbcon.delete_clnt(ttable))
     listhdbtns=['Добавить','Изменить','Удалить','Запрос','Отмена запроса']
     for i in range(0,g):
-        btns.append(tkntr.Button(frame,text=listhdbtns[i])) 
+        btns.append(tkntr.Button(frame,text=listhdbtns[i]))
+        if i==2:btns.append(tkntr.Button(frame,text=listhdbtns[i],command=funcbuttons[0])) 
     for btn in btns:
-        btn.pack(side=tkntr.LEFT,anchor=tkntr.S,padx=80,ipadx=20,pady=5)  
+        btn.pack(side=tkntr.LEFT,anchor=tkntr.S,padx=70,ipadx=20,pady=5)  
     return btns
 def create_lbls(frame,nheadings):
     lbls=[]

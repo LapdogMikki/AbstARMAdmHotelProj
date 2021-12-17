@@ -68,3 +68,15 @@ def cbx_selectuslgs():
     for row in crs.fetchall():
         data.append(row[0])
     return data
+
+def delete_clnt(table):
+    con=connectDB()
+    crs=con.cursor()
+    if table.item(table.selection()) is None:
+        return
+    else:
+        qry="DELETE from client Where FIO=%s"
+        FIO=table.selection()[1]
+        crs.execute(qry,(FIO))
+        con.commit()
+        showtabkli()
