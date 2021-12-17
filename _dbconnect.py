@@ -17,7 +17,7 @@ def showtabbron():
 def showtabkli():
     con=connectDB()
     crs=con.cursor()
-    crs.execute("SELECT FIO,phone,udostlich,seria,nomer,visa,visa_beg_dat,visa_end_date FROM client")
+    crs.execute("SELECT FIO,phone,grzhd,udostlich,seria,nomer,visa,visa_beg_dat,visa_end_date FROM client")
     data=(row for row in crs.fetchall()) 
     return data   
 def showtabrms():
