@@ -1,9 +1,10 @@
+from sqlite3.dbapi2 import SQLITE_SELECT
 import tkinter as tkntr
 from tkinter.constants import COMMAND, HORIZONTAL
 import tkinter.ttk as tkttk
 import _dbconnect as dbcon
 class MFormTabFrame(tkntr.Frame):
-    def __init__(self,parent,headings=tuple(), rows=tuple(),hb=int(),hcbx=int(),he=int(),btns=list(),lbls=list(),cbbxs=list(),empts=list()):
+    def __init__(self,parent,headings=tuple(), rows=tuple(),hb=int(),hcbx=int(),he=int(),tid=int()):
         tkntr.Frame.__init__(self,parent,background="white")
         self.parent = parent
         tablecomps=tkntr.Frame(self,background="white")
@@ -21,20 +22,22 @@ class MFormTabFrame(tkntr.Frame):
         table.configure(xscrollcommand=xscrolltable.set)
         scrolltable.pack(side=tkntr.RIGHT, fill=tkntr.Y)
         xscrolltable.pack(side=tkntr.BOTTOM, fill=tkntr.X)
+        self.table=table
         table.pack(expand=tkntr.YES, fill=tkntr.BOTH)
         tablecomps.pack(side=tkntr.TOP,fill=tkntr.X)
         datecomps=tkntr.Frame(self,background="white")
         btnframe=tkntr.Frame(datecomps,background="white")
         lblframe=tkntr.Frame(datecomps,background="white")
         emptsframe=tkntr.Frame(datecomps,background="white")
-        btns=create_btns(btnframe,hb,table)
-        self.btns=btns
+        self.tid=tid
+        btns=create_btns(btnframe,hb,table,tid)
         lbls=create_lbls(lblframe,headings)
         self.lbls=lbls
         cbbxs=create_cbbxs(emptsframe,hcbx,headings)
         self.cbbxs=cbbxs
         empts=create_txts(emptsframe,he)
         self.empts=empts       
+        self.tid=tid
         btnframe.pack(anchor=tkntr.N,fill=tkntr.BOTH)
         lblframe.pack(side=tkntr.LEFT,anchor=tkntr.SE,fill=tkntr.BOTH)
         emptsframe.pack(side=tkntr.RIGHT,anchor=tkntr.SW,fill=tkntr.BOTH)
@@ -43,14 +46,14 @@ class MFormTabFrame(tkntr.Frame):
     def initUI(self):
         self.pack(fill=tkntr.BOTH,expand=1) 
         
-def create_btns(frame,g,ttable):
+def create_btns(frame,g,ttable,tabid):
     btns=[]
     funcbuttons=[]
     funcbuttons.append(dbcon.delete_clnt(ttable))
     listhdbtns=['Добавить','Изменить','Удалить','Запрос','Отмена запроса']
     for i in range(0,g):
-        btns.append(tkntr.Button(frame,text=listhdbtns[i]))
-        if i==2:btns.append(tkntr.Button(frame,text=listhdbtns[i],command=funcbuttons[0])) 
+        if i==2:btns.append(tkntr.Button(frame,text=listhdbtns[i],command=dbcon.delete_clnt(ttable))) 
+        else: btns.append(tkntr.Button(frame,text=listhdbtns[i]))
     for btn in btns:
         btn.pack(side=tkntr.LEFT,anchor=tkntr.S,padx=70,ipadx=20,pady=5)  
     return btns
