@@ -52,7 +52,7 @@ def create_btns(frame,g,ttable,tabid):
     funcbuttons.append(dbcon.delete_clnt(ttable))
     listhdbtns=['Добавить','Изменить','Удалить','Запрос','Отмена запроса']
     for i in range(0,g):
-        if i==2:btns.append(tkntr.Button(frame,text=listhdbtns[i],command=dbcon.delete_clnt(ttable))) 
+        if i==2:btns.append(tkntr.Button(frame,text=listhdbtns[i],command=funcbuttons[0])) 
         else: btns.append(tkntr.Button(frame,text=listhdbtns[i]))
     for btn in btns:
         btn.pack(side=tkntr.LEFT,anchor=tkntr.S,padx=70,ipadx=20,pady=5)  

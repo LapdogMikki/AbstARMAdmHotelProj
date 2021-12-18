@@ -87,7 +87,7 @@ def delete_clnt(table):
             contents =(table.item(curItem))
             selecteditem = contents['values']
             table.delete(curItem)
-            crs.execute("DELETE FROM client WHERE 'id_klient'=%d"%selecteditem[0])
+            crs.execute("DELETE FROM client WHERE 'phone'=%s"%selecteditem[1])
             con.commit()
             con.close()
             showtabkli()
