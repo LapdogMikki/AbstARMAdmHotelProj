@@ -30,7 +30,6 @@ class MFormTabFrame(tkntr.Frame):
         lblframe=tkntr.Frame(datecomps,background="white")
         emptsframe=tkntr.Frame(datecomps,background="white")
         self.tid=tid
-        btns=create_btns(btnframe,hb,table,tid)
         lbls=create_lbls(lblframe,headings)
         self.lbls=lbls
         cbbxs=create_cbbxs(emptsframe,hcbx,headings)
@@ -38,6 +37,14 @@ class MFormTabFrame(tkntr.Frame):
         empts=create_txts(emptsframe,he)
         self.empts=empts       
         self.tid=tid
+        itms=[]
+        for cbbx in cbbxs:
+            itms.append(cbbx)
+        for empt in empts:
+            itms.append(empt)
+        self.itms=itms
+        btns=create_btns(btnframe,hb,table,tid,itms)
+        self.btns=btns
         btnframe.pack(anchor=tkntr.N,fill=tkntr.BOTH)
         lblframe.pack(side=tkntr.LEFT,anchor=tkntr.SE,fill=tkntr.BOTH)
         emptsframe.pack(side=tkntr.RIGHT,anchor=tkntr.SW,fill=tkntr.BOTH)
@@ -46,13 +53,15 @@ class MFormTabFrame(tkntr.Frame):
     def initUI(self):
         self.pack(fill=tkntr.BOTH,expand=1) 
         
-def create_btns(frame,g,ttable,tabid):
+def create_btns(frame,g,ttable,tabid,itms):
     btns=[]
     funcbuttons=[]
     funcbuttons.append(dbcon.delete_clnt(ttable))
+    funcbuttons.append(dbcon.insert_kli(itms,ttable))
     listhdbtns=['Добавить','Изменить','Удалить','Запрос','Отмена запроса']
     for i in range(0,g):
-        if i==2:btns.append(tkntr.Button(frame,text=listhdbtns[i],command=funcbuttons[0])) 
+        if ((i==2)&(tabid==1)):btns.append(tkntr.Button(frame,text=listhdbtns[i],command=funcbuttons[0]))
+        elif ((i==0)&(tabid==1)):btns.append(tkntr.Button(frame,text=listhdbtns[i],command=funcbuttons[1])) 
         else: btns.append(tkntr.Button(frame,text=listhdbtns[i]))
     for btn in btns:
         btn.pack(side=tkntr.LEFT,anchor=tkntr.S,padx=70,ipadx=20,pady=5)  
