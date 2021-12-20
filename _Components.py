@@ -84,11 +84,33 @@ def create_txts(frame,g):
 def create_cbbxs(frame,g,lheadings):
     cbbxs=[]
     vls=[]
-    if (lheadings[0]=='Номер'):vls.append(dbcon.cbx_selectnmrs())
-    elif (lheadings[0]=='Услуга'):vls.append(dbcon.cbx_selectuslgs())
-    vls.append(dbcon.cbx_selectklts())
+    updts=[]
+    if (lheadings[0]=='Тип номера'):
+        vls.append(dbcon.cbx_tpnmrs())
+    elif (lheadings[0]=='Номер'):
+        vls.append(dbcon.cbx_selectnmrs())
+    elif (lheadings[0]=='Услуга'):
+        vls.append(dbcon.cbx_selectuslgs())
+    if (lheadings[1]=='Клиент'):   
+        vls.append(dbcon.cbx_selectklts())
     for i in range(0,g):
-        cbbxs.append(tkttk.Combobox(frame,values=vls[i])) 
+        cbbxs.append(tkttk.Combobox(frame))
+        rows=vls[i]
+        cbbxs[i]["value"]=list(rows.values()) 
     for cbbx in cbbxs:
+        if (cbbx==cbbxs[0]):
+            if (lheadings[0]=='Тип номера'):
+                updts.append(dbcon.upd_cbx_tpnmrs(cbbx))
+                cbbx.configure(postcommand=updts[0])
+            elif (lheadings[0]=='Номер'):
+                updts.append(dbcon.upd_cbx_selectnmrs(cbbx))
+                cbbx.configure(postcommand=updts[0])
+            elif (lheadings[0]=='Услуга'):
+                updts.append(dbcon.upd_cbx_selectuslgs(cbbx))
+                cbbx.configure(postcommand=updts[0])
+        elif(cbbx==cbbxs[1]):
+            if (lheadings[1]=='Клиент'):   
+                updts.append(dbcon.upd_cbx_selectklts(cbbx))
+                cbbx.configure(postcommand=updts[1])
         cbbx.pack(side=tkntr.TOP,anchor=tkntr.S,padx=180,ipadx=150,pady=4) 
     return cbbxs 

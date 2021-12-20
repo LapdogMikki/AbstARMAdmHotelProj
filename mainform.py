@@ -18,7 +18,7 @@ def main():
     note.add(brn, text = "Бронирование номеров")
     kli = comp.MFormTabFrame(root,headings=('ФИО','Телефон','Гражданство','Уд.личности','Серия','Номер','Виза (п.н)','Дата нач.действия','Дата оконч.действия'),rows=dbcon.showtabkli(),hb=5,he=9,tid=1)
     note.add(kli, text = "Клиенты")
-    rms = comp.MFormTabFrame(root,headings=('Номер','Тип номера','Цена'),rows=dbcon.showtabrms(),hb=5,he=3,tid=2)
+    rms = comp.MFormTabFrame(root,headings=('Тип номера','Номер','Цена'),rows=dbcon.showtabrms(),hb=5,he=2,hcbx=1,tid=2)
     note.add(rms, text = "Номера")
     tprms = comp.MFormTabFrame(root,headings=('Тип номера','Кол-во мест','Цена'),rows=dbcon.showtabtprms(),hb=5,he=3,tid=3)
     note.add(tprms, text = "Типы номеров")
