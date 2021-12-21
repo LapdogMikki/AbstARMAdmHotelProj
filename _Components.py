@@ -44,7 +44,7 @@ class MFormTabFrame(tkntr.Frame):
         for empt in empts:
             itms.append(empt)
         self.itms=itms
-        if tid==1:table.tag_bind('<<TreeviewSelect>>', lambda event,tabid=tid,items=itms,tb=table:on_select_item(event,tabid,items,tb))
+        table.bind('<<TreeviewSelect>>', self.on_select_item)
         btns=create_btns(btnframe,hb,table,tid,itms)
         self.btns=btns
         btnframe.pack(anchor=tkntr.N,fill=tkntr.BOTH)
@@ -52,18 +52,27 @@ class MFormTabFrame(tkntr.Frame):
         emptsframe.pack(side=tkntr.RIGHT,anchor=tkntr.SW,fill=tkntr.BOTH)
         datecomps.pack(fill=tkntr.BOTH)
         self.initUI()
+    def on_select_item(self,event):
+        for self.itm in self.itms:
+            self.itm.delete(0,'end')
+        curItem = self.table.focus()
+        contents =(self.table.item(curItem))
+        selecteditem = contents['values']
+        print(selecteditem)
+        for i in range(0,len(selecteditem)):
+            self.itms[i].insert(0,selecteditem[i])
     def initUI(self):
         self.pack(fill=tkntr.BOTH,expand=1) 
     
-def on_select_item(event,tabid,itms,table):
-    dbcon.get_date_kli(table,itms)
+
+    
            
 def create_btns(frame,g,ttable,tabid,itms):
     btns=[]
-    funcbuttons=[[],[],[],[],[],[]]
+    funcbuttons=[['','','','',''],[dbcon.insert_kli(itms,ttable),'',dbcon.delete_clnt(ttable),'',''],['','','','',''],['','','','',''],['','','','',''],['','','','','']]
     listhdbtns=['Добавить','Изменить','Удалить','Запрос','Отмена запроса']
     for i in range(0,g):
-        btns.append(tkntr.Button(frame,text=listhdbtns[i]))
+        btns.append(tkntr.Button(frame,text=listhdbtns[i],command=funcbuttons[tabid][i]))
     for btn in btns:
         btn.pack(side=tkntr.LEFT,anchor=tkntr.S,padx=70,ipadx=20,pady=5)  
     return btns
