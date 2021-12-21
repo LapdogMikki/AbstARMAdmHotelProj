@@ -115,6 +115,14 @@ def insert_kli(itms,table):
         con.close()
         view_tab_rec_kli(table)
     return ins_kli
+def get_date_kli(table,itms):
+    def get_dkli():
+        for line in table.get_children():
+            for value in table.item(line)['values']:
+                print(value)
+    return get_dkli()
+        
+        
 def view_tab_rec_kli(table):
     con=connectDB()
     crs=con.cursor()
@@ -145,13 +153,19 @@ def delete_bron(table):
             contents =(table.item(curItem))
             selecteditem = contents['values']
             table.delete(curItem)
-            crs.execute("DELETE FROM nmb_room WHERE ",(selecteditem[0],))
+            crs.execute("DELETE FROM nmb_room WHERE rooms.nmb_room=?",(selecteditem[0],))
             con.commit()
-            con.close()
-            
+            con.close()    
+            view_tab_rec_bron(table)
         else:
             mb.showerror('Ошибка','Не выделена запись')
     return del_brn
+def view_tab_rec_bron(table):
+    con=connectDB()
+    crs=con.cursor()
+    crs.execute("SELECT rooms.nmb_room,client.FIO,resrvd.date_chckin,resrvd.date_evict FROM rooms,client,resrvd WHERE client.id_klient=resrvd.id_client and rooms.id_room=resrvd.id_room") 
+    [table.delete(i) for i in table.get_children()] 
+    [table.insert('','end',values=row) for row in crs.fetchall()]  
 
 def delete_clnt(table):
     def del_cl():
@@ -228,10 +242,11 @@ def delete_okusl(table):
             contents =(table.item(curItem))
             selecteditem = contents['values']
             table.delete(curItem)
-            crs.execute("DELETE FROM  WHERE =(?)",(selecteditem[0],))
+            crs.execute("DELETE FROM okusl WHERE =(?)",(selecteditem[0],))
             con.commit()
             con.close()
             
         else:
             mb.showerror('Ошибка','Не выделена запись')
     return del_okusl
+
