@@ -6,6 +6,7 @@ import _dbconnect as dbcon
 class MFormTabFrame(tkntr.Frame):
     def __init__(self,parent,headings=tuple(), rows=tuple(),hb=int(),hcbx=int(),he=int(),tid=int()):
         tkntr.Frame.__init__(self,parent,background="white")
+        
         self.parent = parent
         tablecomps=tkntr.Frame(self,background="white")
         table = tkttk.Treeview(tablecomps, show="headings", selectmode="browse")
@@ -43,9 +44,7 @@ class MFormTabFrame(tkntr.Frame):
         for empt in empts:
             itms.append(empt)
         self.itms=itms
-        db_items=[]
-        db_items.append(dbcon.get_date_kli(table,itms))
-        table.tag_bind('<<TreeviewSelect>>', db_items[0])
+        if tid==1:table.tag_bind('<<TreeviewSelect>>', lambda event,tabid=tid,items=itms,tb=table:on_select_item(event,tabid,items,tb))
         btns=create_btns(btnframe,hb,table,tid,itms)
         self.btns=btns
         btnframe.pack(anchor=tkntr.N,fill=tkntr.BOTH)
@@ -55,7 +54,10 @@ class MFormTabFrame(tkntr.Frame):
         self.initUI()
     def initUI(self):
         self.pack(fill=tkntr.BOTH,expand=1) 
-        
+    
+def on_select_item(event,tabid,itms,table):
+    dbcon.get_date_kli(table,itms)
+           
 def create_btns(frame,g,ttable,tabid,itms):
     btns=[]
     funcbuttons=[[],[],[],[],[],[]]

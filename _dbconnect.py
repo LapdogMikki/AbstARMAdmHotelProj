@@ -117,11 +117,11 @@ def insert_kli(itms,table):
     return ins_kli
 def get_date_kli(table,itms):
     def get_dkli():
-        for line in table.get_children():
-            for value in table.item(line)['values']:
-                print(value)
-    return get_dkli()
-        
+        curItem = table.focus()
+        contents =(table.item(curItem))
+        selecteditem = contents['values']
+        print(selecteditem)
+    return get_dkli()       
         
 def view_tab_rec_kli(table):
     con=connectDB()
