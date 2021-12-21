@@ -63,14 +63,11 @@ class MFormTabFrame(tkntr.Frame):
             self.itms[i].insert(0,selecteditem[i])
     def initUI(self):
         self.pack(fill=tkntr.BOTH,expand=1) 
-    
-
-    
-           
+             
 def create_btns(frame,g,ttable,tabid,itms):
     btns=[]
-    funcbuttons=[['','','','',''],[dbcon.insert_kli(itms,ttable),'',dbcon.delete_clnt(ttable),'',''],['','','','',''],['','','','',''],['','','','',''],['','','','','']]
-    listhdbtns=['Добавить','Изменить','Удалить','Запрос','Отмена запроса']
+    funcbuttons=[['','',dbcon.delete_bron(ttable)],[dbcon.insert_kli(itms,ttable),'',dbcon.delete_clnt(ttable)],['','',dbcon.delete_nmb(ttable)],[dbcon.insert_tab_trooms(itms,ttable),'',dbcon.delete_tproom(ttable)],['','',dbcon.delete_uslgs(ttable)],['','',dbcon.delete_okusl(ttable)]]
+    listhdbtns=['Добавить','Изменить','Удалить']
     for i in range(0,g):
         btns.append(tkntr.Button(frame,text=listhdbtns[i],command=funcbuttons[tabid][i]))
     for btn in btns:
