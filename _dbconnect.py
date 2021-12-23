@@ -180,7 +180,6 @@ def delete_bron(table):
             curItem = table.focus()
             contents =(table.item(curItem))
             selecteditem = contents['values']
-            table.delete(curItem)
             crs.execute("DELETE FROM nmb_room WHERE rooms.nmb_room=?",(selecteditem[0],))
             con.commit()
             con.close()    
@@ -193,6 +192,98 @@ def view_tab_rec_bron(table):
     crs.execute("SELECT rooms.nmb_room,client.FIO,resrvd.date_chckin,resrvd.date_evict FROM rooms,client,resrvd WHERE client.id_klient=resrvd.id_client and rooms.id_room=resrvd.id_room") 
     [table.delete(i) for i in table.get_children()] 
     [table.insert('','end',values=row) for row in crs.fetchall()]  
+
+def update_clnt(table,itms):
+    def upd_cl():
+        if table.selection():
+            con=connectDB()
+            crs=con.cursor()
+            curItem = table.focus()
+            contents =(table.item(curItem))
+            selecteditem = contents['values']
+            crs.execute("UPDATE client SET FIO=?,phone=?,grzhd=?,udostlich=?,seria=?,nomer=?,visa=?,visa_beg_dat=?,visa_end_date=? WHERE FIO=(?)",(str(itms[0].get()),str(itms[1].get()),str(itms[2].get()),str(itms[3].get()),str(itms[4].get()),str(itms[5].get()),str(itms[6].get()),str(itms[7].get()),str(itms[8].get()),selecteditem[0],))
+            con.commit()
+            con.close()
+            view_tab_rec_kli(table)
+        else:
+            mb.showerror('Ошибка','Не выделена запись')
+    return upd_cl
+def update_clnt(table,itms):
+    def upd_cl():
+        if table.selection():
+            con=connectDB()
+            crs=con.cursor()
+            curItem = table.focus()
+            contents =(table.item(curItem))
+            selecteditem = contents['values']
+            crs.execute("UPDATE client SET FIO=?,phone=?,grzhd=?,udostlich=?,seria=?,nomer=?,visa=?,visa_beg_dat=?,visa_end_date=? WHERE FIO=(?)",(str(itms[0].get()),str(itms[1].get()),str(itms[2].get()),str(itms[3].get()),str(itms[4].get()),str(itms[5].get()),str(itms[6].get()),str(itms[7].get()),str(itms[8].get()),selecteditem[0],))
+            con.commit()
+            con.close()
+            view_tab_rec_kli(table)
+        else:
+            mb.showerror('Ошибка','Не выделена запись')
+    return upd_cl
+def update_clnt(table,itms):
+    def upd_cl():
+        if table.selection():
+            con=connectDB()
+            crs=con.cursor()
+            curItem = table.focus()
+            contents =(table.item(curItem))
+            selecteditem = contents['values']
+            crs.execute("UPDATE client SET FIO=?,phone=?,grzhd=?,udostlich=?,seria=?,nomer=?,visa=?,visa_beg_dat=?,visa_end_date=? WHERE FIO=(?)",(str(itms[0].get()),str(itms[1].get()),str(itms[2].get()),str(itms[3].get()),str(itms[4].get()),str(itms[5].get()),str(itms[6].get()),str(itms[7].get()),str(itms[8].get()),selecteditem[0],))
+            con.commit()
+            con.close()
+            view_tab_rec_kli(table)
+        else:
+            mb.showerror('Ошибка','Не выделена запись')
+    return upd_cl
+def update_clnt(table,itms):
+    def upd_cl():
+        if table.selection():
+            con=connectDB()
+            crs=con.cursor()
+            curItem = table.focus()
+            contents =(table.item(curItem))
+            selecteditem = contents['values']
+            crs.execute("UPDATE client SET FIO=?,phone=?,grzhd=?,udostlich=?,seria=?,nomer=?,visa=?,visa_beg_dat=?,visa_end_date=? WHERE FIO=(?)",(str(itms[0].get()),str(itms[1].get()),str(itms[2].get()),str(itms[3].get()),str(itms[4].get()),str(itms[5].get()),str(itms[6].get()),str(itms[7].get()),str(itms[8].get()),selecteditem[0],))
+            con.commit()
+            con.close()
+            view_tab_rec_kli(table)
+        else:
+            mb.showerror('Ошибка','Не выделена запись')
+    return upd_cl
+def update_clnt(table,itms):
+    def upd_cl():
+        if table.selection():
+            con=connectDB()
+            crs=con.cursor()
+            curItem = table.focus()
+            contents =(table.item(curItem))
+            selecteditem = contents['values']
+            crs.execute("UPDATE client SET FIO=?,phone=?,grzhd=?,udostlich=?,seria=?,nomer=?,visa=?,visa_beg_dat=?,visa_end_date=? WHERE FIO=(?)",(str(itms[0].get()),str(itms[1].get()),str(itms[2].get()),str(itms[3].get()),str(itms[4].get()),str(itms[5].get()),str(itms[6].get()),str(itms[7].get()),str(itms[8].get()),selecteditem[0],))
+            con.commit()
+            con.close()
+            view_tab_rec_kli(table)
+        else:
+            mb.showerror('Ошибка','Не выделена запись')
+    return upd_cl
+def update_clnt(table,itms):
+    def upd_cl():
+        if table.selection():
+            con=connectDB()
+            crs=con.cursor()
+            curItem = table.focus()
+            contents =(table.item(curItem))
+            selecteditem = contents['values']
+            crs.execute("UPDATE client SET FIO=?,phone=?,grzhd=?,udostlich=?,seria=?,nomer=?,visa=?,visa_beg_dat=?,visa_end_date=? WHERE FIO=(?)",(str(itms[0].get()),str(itms[1].get()),str(itms[2].get()),str(itms[3].get()),str(itms[4].get()),str(itms[5].get()),str(itms[6].get()),str(itms[7].get()),str(itms[8].get()),selecteditem[0],))
+            con.commit()
+            con.close()
+            view_tab_rec_kli(table)
+        else:
+            mb.showerror('Ошибка','Не выделена запись')
+    return upd_cl
+
 
 def delete_clnt(table):
     def del_cl():
