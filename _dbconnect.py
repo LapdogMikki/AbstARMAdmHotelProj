@@ -208,81 +208,38 @@ def update_clnt(table,itms):
         else:
             mb.showerror('Ошибка','Не выделена запись')
     return upd_cl
-def update_clnt(table,itms):
-    def upd_cl():
+
+def update_trooms(table,itms):
+    def upd_trm():
         if table.selection():
             con=connectDB()
             crs=con.cursor()
             curItem = table.focus()
             contents =(table.item(curItem))
             selecteditem = contents['values']
-            crs.execute("UPDATE client SET FIO=?,phone=?,grzhd=?,udostlich=?,seria=?,nomer=?,visa=?,visa_beg_dat=?,visa_end_date=? WHERE FIO=(?)",(str(itms[0].get()),str(itms[1].get()),str(itms[2].get()),str(itms[3].get()),str(itms[4].get()),str(itms[5].get()),str(itms[6].get()),str(itms[7].get()),str(itms[8].get()),selecteditem[0],))
+            crs.execute("UPDATE trooms SET t_room=?,kolvo_mest=?,price=? WHERE FIO=(?)",(str(itms[0].get()),str(itms[1].get()),float(itms[2].get()),selecteditem[0],))
             con.commit()
             con.close()
             view_tab_rec_kli(table)
         else:
             mb.showerror('Ошибка','Не выделена запись')
-    return upd_cl
-def update_clnt(table,itms):
-    def upd_cl():
+    return upd_trm
+def update_uslgs(table,itms):
+    def upd_usl():
         if table.selection():
             con=connectDB()
             crs=con.cursor()
             curItem = table.focus()
             contents =(table.item(curItem))
             selecteditem = contents['values']
-            crs.execute("UPDATE client SET FIO=?,phone=?,grzhd=?,udostlich=?,seria=?,nomer=?,visa=?,visa_beg_dat=?,visa_end_date=? WHERE FIO=(?)",(str(itms[0].get()),str(itms[1].get()),str(itms[2].get()),str(itms[3].get()),str(itms[4].get()),str(itms[5].get()),str(itms[6].get()),str(itms[7].get()),str(itms[8].get()),selecteditem[0],))
+            crs.execute("UPDATE uslugs SET name_usluga,ed_izm,price WHERE FIO=(?)",(str(itms[0].get()),str(itms[1].get()),str(itms[2].get()),selecteditem[0],))
             con.commit()
             con.close()
             view_tab_rec_kli(table)
         else:
             mb.showerror('Ошибка','Не выделена запись')
-    return upd_cl
-def update_clnt(table,itms):
-    def upd_cl():
-        if table.selection():
-            con=connectDB()
-            crs=con.cursor()
-            curItem = table.focus()
-            contents =(table.item(curItem))
-            selecteditem = contents['values']
-            crs.execute("UPDATE client SET FIO=?,phone=?,grzhd=?,udostlich=?,seria=?,nomer=?,visa=?,visa_beg_dat=?,visa_end_date=? WHERE FIO=(?)",(str(itms[0].get()),str(itms[1].get()),str(itms[2].get()),str(itms[3].get()),str(itms[4].get()),str(itms[5].get()),str(itms[6].get()),str(itms[7].get()),str(itms[8].get()),selecteditem[0],))
-            con.commit()
-            con.close()
-            view_tab_rec_kli(table)
-        else:
-            mb.showerror('Ошибка','Не выделена запись')
-    return upd_cl
-def update_clnt(table,itms):
-    def upd_cl():
-        if table.selection():
-            con=connectDB()
-            crs=con.cursor()
-            curItem = table.focus()
-            contents =(table.item(curItem))
-            selecteditem = contents['values']
-            crs.execute("UPDATE client SET FIO=?,phone=?,grzhd=?,udostlich=?,seria=?,nomer=?,visa=?,visa_beg_dat=?,visa_end_date=? WHERE FIO=(?)",(str(itms[0].get()),str(itms[1].get()),str(itms[2].get()),str(itms[3].get()),str(itms[4].get()),str(itms[5].get()),str(itms[6].get()),str(itms[7].get()),str(itms[8].get()),selecteditem[0],))
-            con.commit()
-            con.close()
-            view_tab_rec_kli(table)
-        else:
-            mb.showerror('Ошибка','Не выделена запись')
-    return upd_cl
-def update_clnt(table,itms):
-    def upd_cl():
-        if table.selection():
-            con=connectDB()
-            crs=con.cursor()
-            curItem = table.focus()
-            contents =(table.item(curItem))
-            selecteditem = contents['values']
-            crs.execute("UPDATE client SET FIO=?,phone=?,grzhd=?,udostlich=?,seria=?,nomer=?,visa=?,visa_beg_dat=?,visa_end_date=? WHERE FIO=(?)",(str(itms[0].get()),str(itms[1].get()),str(itms[2].get()),str(itms[3].get()),str(itms[4].get()),str(itms[5].get()),str(itms[6].get()),str(itms[7].get()),str(itms[8].get()),selecteditem[0],))
-            con.commit()
-            con.close()
-            view_tab_rec_kli(table)
-        else:
-            mb.showerror('Ошибка','Не выделена запись')
-    return upd_cl
+    return upd_usl
+
 
 
 def delete_clnt(table):
