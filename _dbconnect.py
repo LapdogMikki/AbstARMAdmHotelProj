@@ -74,7 +74,7 @@ def cbx_selectnmrs():
     return rows
 def upd_cbx_selectnmrs(cbbx):
     def upd_cbx_selnmr():
-        cbbx["values"].delete()
+        cbbx["values"]=''
         data=cbx_selectnmrs()
         cbbx["values"]=list(data.values())  
     return upd_cbx_selnmr 
@@ -106,6 +106,45 @@ def upd_cbx_selectuslgs(cbbx):
         data=cbx_selectuslgs()
         cbbx["values"]=list(data.values()) 
     return upd_cbx_selusl   
+
+def insert_brons(itms,table): 
+    def ins_bron():
+        con=connectDB()
+        crs=con.cursor()
+        slv_kl=cbx_selectklts()
+        nm_cl=str(itms[1].get())
+        for key in slv_kl.keys:
+            if nm_cl==slv_kl[key]:
+                id_kl=key
+        slv_room=cbx_selectnmrs()
+        nm_rm=str(itms[0].get())
+        for key in slv_room.keys:
+            if nm_cl==slv_room[key]:
+                id_rm=key
+        crs.execute("INSERT INTO resrvd(id_room,id_client,date_chckin,rdate_evict) VALUES(?,?,?, ?)",(id_rm,id_kl,str(itms[2].get()),str(itms[3].get()),))
+        con.commit()  
+        con.close()
+        view_tab_rec_bron(table)
+    return ins_bron  
+
+def insert_rooms(itms,table): 
+    def ins_room():
+        con=connectDB()
+        crs=con.cursor()
+        slv_troom=cbx_tpnmrs()
+        nm_trm=str(itms[0].get())
+        for key in slv_troom.keys():
+            if nm_trm==slv_troom[key]:
+                id_trm=key
+        crs.execute("Select price from type_room WHERE id_type=?",(id_trm,))
+        prc=crs.fetchone()
+        print(prc[0])
+        print (id_trm)
+        crs.execute("INSERT INTO rooms(id_type_room,nmb_room) VALUES(?,?)",(id_trm,str(itms[1].get()),))
+        con.commit()  
+        con.close()
+        view_tab_rec_rooms(table)
+    return ins_room 
 def insert_kli(itms,table): 
     def ins_kli():
         con=connectDB()
@@ -114,15 +153,13 @@ def insert_kli(itms,table):
         con.commit()  
         con.close()
         view_tab_rec_kli(table)
-    return ins_kli     
-        
+    return ins_kli             
 def view_tab_rec_kli(table):
     con=connectDB()
     crs=con.cursor()
     crs.execute("SELECT FIO,phone,grzhd,udostlich,seria,nomer,visa,visa_beg_dat,visa_end_date FROM client")
     [table.delete(i) for i in table.get_children()] 
-    [table.insert('','end',values=row) for row in crs.fetchall()] 
-     
+    [table.insert('','end',values=row) for row in crs.fetchall()]    
 def insert_tab_trooms(itms,table): 
     def ins_trooms():
         con=connectDB()
@@ -132,7 +169,6 @@ def insert_tab_trooms(itms,table):
         con.close()
         view_tab_rec_trooms(table)
     return ins_trooms
-
 def insert_tab_uslgs(itms,table): 
     def ins_uslgs():
         con=connectDB()
@@ -142,21 +178,18 @@ def insert_tab_uslgs(itms,table):
         con.close()
         view_tab_rec_uslgs(table)
     return ins_uslgs
-
 def view_tab_rec_uslgs(table):
     con=connectDB()
     crs=con.cursor()
     crs.execute("SELECT name_usluga,ed_izm,price FROM uslugs")    
     [table.delete(i) for i in table.get_children()] 
     [table.insert('','end',values=row) for row in crs.fetchall()]  
-
 def view_tab_rec_trooms(table):
     con=connectDB()
     crs=con.cursor()
     crs.execute("SELECT t_room,kolvo_mest,price FROM type_room")
     [table.delete(i) for i in table.get_children()] 
-    [table.insert('','end',values=row) for row in crs.fetchall()]
-    
+    [table.insert('','end',values=row) for row in crs.fetchall()]  
 def view_tab_rec_rooms(table):
     con=connectDB()
     crs=con.cursor()
@@ -267,7 +300,7 @@ def delete_nmb(table):
             contents =(table.item(curItem))
             selecteditem = contents['values']
             table.delete(curItem)
-            crs.execute("DELETE FROM rooms WHERE nmb_room=(?)",(selecteditem[0],))
+            crs.execute("DELETE FROM rooms WHERE nmb_room=(?)",(selecteditem[1],))
             con.commit()
             con.close()    
         else:

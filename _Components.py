@@ -31,7 +31,7 @@ class MFormTabFrame(tkntr.Frame):
         lblframe=tkntr.Frame(datecomps,background="white")
         emptsframe=tkntr.Frame(datecomps,background="white")
         self.tid=tid
-        lbls=create_lbls(lblframe,headings)
+        lbls=create_lbls(lblframe,headings,tid)
         self.lbls=lbls
         cbbxs=create_cbbxs(emptsframe,hcbx,headings)
         self.cbbxs=cbbxs
@@ -65,17 +65,19 @@ class MFormTabFrame(tkntr.Frame):
              
 def create_btns(frame,g,ttable,tabid,itms):
     btns=[]
-    funcbuttons=[['','',dbcon.delete_bron(ttable)],[dbcon.insert_kli(itms,ttable),dbcon.update_clnt(ttable,itms),dbcon.delete_clnt(ttable)],['','',dbcon.delete_nmb(ttable)],[dbcon.insert_tab_trooms(itms,ttable),dbcon.update_trooms(ttable,itms),dbcon.delete_tproom(ttable)],[dbcon.insert_tab_uslgs(itms,ttable),dbcon.update_uslgs(ttable,itms),dbcon.delete_uslgs(ttable)],['','',dbcon.delete_okusl(ttable)]]
+    funcbuttons=[[dbcon.insert_brons(itms,ttable),'',dbcon.delete_bron(ttable)],[dbcon.insert_kli(itms,ttable),dbcon.update_clnt(ttable,itms),dbcon.delete_clnt(ttable)],[dbcon.insert_rooms(itms,ttable),'',dbcon.delete_nmb(ttable)],[dbcon.insert_tab_trooms(itms,ttable),dbcon.update_trooms(ttable,itms),dbcon.delete_tproom(ttable)],[dbcon.insert_tab_uslgs(itms,ttable),dbcon.update_uslgs(ttable,itms),dbcon.delete_uslgs(ttable)],['','',dbcon.delete_okusl(ttable)]]
     listhdbtns=['Добавить','Изменить','Удалить']
     for i in range(0,g):
         btns.append(tkntr.Button(frame,text=listhdbtns[i],command=funcbuttons[tabid][i]))
     for btn in btns:
         btn.pack(side=tkntr.LEFT,anchor=tkntr.S,padx=150,ipadx=20,pady=5)  
     return btns
-def create_lbls(frame,nheadings):
+def create_lbls(frame,nheadings,tid):
     lbls=[]
     listhdlbls=list(nheadings)
-    for i in range(0,len(listhdlbls)):
+    if tid==2:ln=len(listhdlbls)-1
+    else: ln=len(listhdlbls)
+    for i in range(0,ln):
         lbls.append(tkntr.Label(frame,text=listhdlbls[i],background="white")) 
     for lbl in lbls:
         lbl.pack(side=tkntr.TOP,anchor=tkntr.S,padx=75,ipadx=30,pady=3) 
