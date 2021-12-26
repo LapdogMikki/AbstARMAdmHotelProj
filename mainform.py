@@ -24,7 +24,7 @@ def main():
     note.add(tprms, text = "Типы номеров")
     uslg = comp.MFormTabFrame(root,headings=('Услуга','Ед.измерения','Цена'),rows=dbcon.showtabusl(),hb=3,he=3,tid=4)
     note.add(uslg, text = "Услуги")
-    okusl = comp.MFormTabFrame(root,headings=('Услуга','Клиент','Количество','Дата','Цена'),rows=dbcon.showtabokusl(),hb=3,hcbx=2,he=3,tid=5)
+    okusl = comp.MFormTabFrame(root,headings=('Услуга','Клиент','Количество','Дата','Цена'),rows=dbcon.showtabokusl(),hb=3,hcbx=2,he=2,tid=5)
     note.add(okusl, text = "Оказанные услуги")
     note.pack()
     root.mainloop()

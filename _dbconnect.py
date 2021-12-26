@@ -1,10 +1,11 @@
 import sqlite3
 import os
-from sqlite3.dbapi2 import Error
+from datetime import *
+from sqlite3.dbapi2 import PARSE_COLNAMES, Error
 from tkinter import messagebox as mb
 def connectDB():
     try:
-        cnct=sqlite3.connect("gst.db")
+        cnct=sqlite3.connect("gst.db",detect_types=sqlite3.PARSE_DECLTYPES | PARSE_COLNAMES)
         return cnct
     except Error:
         print(Error)
@@ -18,7 +19,7 @@ def showtabbron():
 def showtabkli():
     con=connectDB()
     crs=con.cursor()
-    crs.execute("SELECT FIO,phone,grzhd,udostlich,seria,nomer,visa,visa_beg_dat,visa_end_date FROM client")
+    crs.execute("SELECT FIO,phone,grzhd,udostlich,seria,nomer,visa,visabegdat,visaenddate FROM client")
     data=(row for row in crs.fetchall()) 
     con.close()
     return data   
@@ -119,9 +120,36 @@ def insert_brons(itms,table):
         slv_room=cbx_selectnmrs()
         nm_rm=str(itms[0].get())
         for key in slv_room.keys:
-            if nm_cl==slv_room[key]:
+            if nm_rm==slv_room[key]:
                 id_rm=key
-        crs.execute("INSERT INTO resrvd(id_room,id_client,date_chckin,rdate_evict) VALUES(?,?,?, ?)",(id_rm,id_kl,str(itms[2].get()),str(itms[3].get()),))
+        crs.execute("INSERT INTO resrvd(id_room,id_client,date_chckin,date_evict) VALUES(?,?,?, ?)",(id_rm,id_kl,datetime(itms[2].get()),datetime(itms[3].get()),))
+        con.commit()  
+        con.close()
+        view_tab_rec_bron(table)
+    return ins_bron  
+
+def insert_okusls(itms,table): 
+    def ins_bron():
+        con=connectDB()
+        crs=con.cursor()
+        slv_kl=cbx_selectklts()
+        nm_cl=str(itms[1].get())
+        for key in slv_kl.keys:
+            if nm_cl==slv_kl[key]:
+                id_kl=key
+        slv_uslgs=cbx_selectuslgs()
+        nm_usl=str(itms[0].get())
+        for key in slv_uslgs.keys:
+            if nm_usl==slv_uslgs[key]:
+                id_usl=key
+        crs.execute("Select price from usluga WHERE id_usluga=?",(id_usl,))
+        price=crs.fetchone()
+        prc=price[0]*int(itms[3].get())
+        print(price[0])
+        print(prc)
+        print(itms[3].get())
+        print(date(itms[3].get()))
+        crs.execute("INSERT INTO ispolz_uslug(id_usluga,id_client,date_usg,kol_vo,price) VALUES(?,?,?,?,?)",(id_usl,id_kl,date(itms[2].get()),int(itms[3].get()),prc))
         con.commit()  
         con.close()
         view_tab_rec_bron(table)
@@ -149,7 +177,7 @@ def insert_kli(itms,table):
     def ins_kli():
         con=connectDB()
         crs=con.cursor()
-        crs.execute("INSERT INTO client(FIO,phone,grzhd,udostlich,seria,nomer,visa,visa_beg_dat,visa_end_date) VALUES(?,?,?, ?, ?,?,?,?,?)",(str(itms[0].get()),str(itms[1].get()),str(itms[2].get()),str(itms[3].get()),str(itms[4].get()),str(itms[5].get()),str(itms[6].get()),str(itms[7].get()),str(itms[8].get())))
+        crs.execute("INSERT INTO client(FIO,phone,grzhd,udostlich,seria,nomer,visa,visabegdat,visaenddate) VALUES(?,?,?, ?, ?,?,?,?,?)",(str(itms[0].get()),str(itms[1].get()),str(itms[2].get()),str(itms[3].get()),str(itms[4].get()),str(itms[5].get()),str(itms[6].get()),str(itms[7].get()),str(itms[8].get())))
         con.commit()  
         con.close()
         view_tab_rec_kli(table)
@@ -157,7 +185,7 @@ def insert_kli(itms,table):
 def view_tab_rec_kli(table):
     con=connectDB()
     crs=con.cursor()
-    crs.execute("SELECT FIO,phone,grzhd,udostlich,seria,nomer,visa,visa_beg_dat,visa_end_date FROM client")
+    crs.execute("SELECT FIO,phone,grzhd,udostlich,seria,nomer,visa,visabegdat,visaenddate FROM client")
     [table.delete(i) for i in table.get_children()] 
     [table.insert('','end',values=row) for row in crs.fetchall()]    
 def insert_tab_trooms(itms,table): 
@@ -234,7 +262,7 @@ def update_clnt(table,itms):
             curItem = table.focus()
             contents =(table.item(curItem))
             selecteditem = contents['values']
-            crs.execute("UPDATE client SET FIO=?,phone=?,grzhd=?,udostlich=?,seria=?,nomer=?,visa=?,visa_beg_dat=?,visa_end_date=? WHERE FIO=(?)",(str(itms[0].get()),str(itms[1].get()),str(itms[2].get()),str(itms[3].get()),str(itms[4].get()),str(itms[5].get()),str(itms[6].get()),str(itms[7].get()),str(itms[8].get()),selecteditem[0],))
+            crs.execute("UPDATE client SET FIO=?,phone=?,grzhd=?,udostlich=?,seria=?,nomer=?,visa=?,visabegdat=?,visaenddate=? WHERE FIO=(?)",(str(itms[0].get()),str(itms[1].get()),str(itms[2].get()),str(itms[3].get()),str(itms[4].get()),str(itms[5].get()),str(itms[6].get()),str(itms[7].get()),str(itms[8].get()),selecteditem[0],))
             con.commit()
             con.close()
             view_tab_rec_kli(table)
