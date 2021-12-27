@@ -457,3 +457,40 @@ def delete_okusl(table):
             mb.showerror('Ошибка','Не выделена запись')
     return del_okusl
 
+def update_okusl(itms,table):
+    def upd_okusl():
+        if table.selection():
+            con=connectDB()
+            crs=con.cursor()
+            curItem = table.focus()
+            contents =(table.item(curItem))
+            selecteditem = contents['values']
+            table.delete(curItem)
+            slv_kl=cbx_selectklts()
+            nm_cl=str(itms[1].get())
+            nm_cl_sel=str(selecteditem[1])
+            for key in slv_kl.keys():
+                if nm_cl==slv_kl[key]:
+                    id_kl=key
+                if nm_cl_sel==slv_kl[key]:
+                    id_kl_sel=key
+            slv_uslgs=cbx_selectuslgs()
+            nm_usl=str(itms[0].get())
+            nm_usl_sel=str(selecteditem[0])
+            for key in slv_uslgs.keys():
+                if nm_usl==slv_uslgs[key]:
+                    id_usl=key
+                if nm_usl_sel=slv_uslgs[key]:
+                    id_usl_sel=key                
+            crs.execute("Select price from uslugs WHERE id_usluga=?",(id_usl,))
+            price=crs.fetchone()
+            kol=int(itms[2].get())
+            prc=float(price[0])*kol
+            crs.execute("UPDATE ispolz_uslug SET id_usluga=?,id_client=?,date_usg=?,kol_vo=?,price=? WHERE id_usluga=? and id_client=? and kol_vo=? and date_usg=? and price=?",(int(id_usl),int(id_kl),selecteditem[2],selecteditem[3],selecteditem[4]))
+            con.commit()
+            con.close()
+            view_tab_rec_okuslgs(table)
+        else:
+            mb.showerror('Ошибка','Не выделена запись')
+    return upd_okusl
+
