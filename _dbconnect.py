@@ -228,7 +228,7 @@ def view_tab_rec_okuslgs(table):
     [table.insert('','end',values=row) for row in crs.fetchall()]
     
   
-def delete_bron(table):
+def delete_bron(itms,table):
     def del_brn():
         if table.selection():
             con=connectDB()
@@ -329,7 +329,7 @@ def update_uslgs(table,itms):
             curItem = table.focus()
             contents =(table.item(curItem))
             selecteditem = contents['values']
-            crs.execute("UPDATE uslugs SET name_usluga,ed_izm,price WHERE FIO=(?)",(str(itms[0].get()),str(itms[1].get()),str(itms[2].get()),selecteditem[0],))
+            crs.execute("UPDATE uslugs SET name_usluga=?,ed_izm=?,price=? WHERE name_usluga=?",(str(itms[0].get()),str(itms[1].get()),str(itms[2].get()),selecteditem[0],))
             con.commit()
             con.close()
             view_tab_rec_uslgs(table)
@@ -480,13 +480,13 @@ def update_okusl(itms,table):
             for key in slv_uslgs.keys():
                 if nm_usl==slv_uslgs[key]:
                     id_usl=key
-                if nm_usl_sel=slv_uslgs[key]:
+                if nm_usl_sel==slv_uslgs[key]:
                     id_usl_sel=key                
             crs.execute("Select price from uslugs WHERE id_usluga=?",(id_usl,))
             price=crs.fetchone()
             kol=int(itms[2].get())
             prc=float(price[0])*kol
-            crs.execute("UPDATE ispolz_uslug SET id_usluga=?,id_client=?,date_usg=?,kol_vo=?,price=? WHERE id_usluga=? and id_client=? and kol_vo=? and date_usg=? and price=?",(int(id_usl),int(id_kl),selecteditem[2],selecteditem[3],selecteditem[4]))
+            crs.execute("UPDATE ispolz_uslug SET id_usluga=?,id_client=?,date_usg=?,kol_vo=?,price=? WHERE id_usluga=? and id_client=? and kol_vo=? and date_usg=? and price=?",(int(id_usl),int(id_kl),itms[3].get(),kol,prc,id_usl_sel,id_kl_sel,selecteditem[2],selecteditem[3],selecteditem[4]))
             con.commit()
             con.close()
             view_tab_rec_okuslgs(table)

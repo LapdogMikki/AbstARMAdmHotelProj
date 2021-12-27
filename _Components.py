@@ -65,7 +65,7 @@ class MFormTabFrame(tkntr.Frame):
              
 def create_btns(frame,g,ttable,tabid,itms):
     btns=[]
-    funcbuttons=[[dbcon.insert_brons(itms,ttable),dbcon.update_bron(itms,ttable),dbcon.delete_bron(ttable)],[dbcon.insert_kli(itms,ttable),dbcon.update_clnt(ttable,itms),dbcon.delete_clnt(ttable)],[dbcon.insert_rooms(itms,ttable),dbcon.update_nmb(itms,ttable),dbcon.delete_nmb(ttable)],[dbcon.insert_tab_trooms(itms,ttable),dbcon.update_trooms(ttable,itms),dbcon.delete_tproom(ttable)],[dbcon.insert_tab_uslgs(itms,ttable),dbcon.update_uslgs(ttable,itms),dbcon.delete_uslgs(ttable)],[dbcon.insert_okusls(itms,ttable),'',dbcon.delete_okusl(ttable)]]
+    funcbuttons=[[dbcon.insert_brons(itms,ttable),dbcon.update_bron(itms,ttable),dbcon.delete_bron(itms,ttable)],[dbcon.insert_kli(itms,ttable),dbcon.update_clnt(ttable,itms),dbcon.delete_clnt(ttable)],[dbcon.insert_rooms(itms,ttable),dbcon.update_nmb(itms,ttable),dbcon.delete_nmb(ttable)],[dbcon.insert_tab_trooms(itms,ttable),dbcon.update_trooms(ttable,itms),dbcon.delete_tproom(ttable)],[dbcon.insert_tab_uslgs(itms,ttable),dbcon.update_uslgs(ttable,itms),dbcon.delete_uslgs(ttable)],[dbcon.insert_okusls(itms,ttable),dbcon.update_okusl(itms,ttable),dbcon.delete_okusl(ttable)]]
     listhdbtns=['Добавить','Изменить','Удалить']
     for i in range(0,g):
         btns.append(tkntr.Button(frame,text=listhdbtns[i],command=funcbuttons[tabid][i]))
