@@ -5,7 +5,7 @@ from sqlite3.dbapi2 import PARSE_COLNAMES, Error
 from tkinter import messagebox as mb
 def connectDB():
     try:
-        cnct=sqlite3.connect("gst.db",detect_types=sqlite3.PARSE_DECLTYPES | PARSE_COLNAMES)
+        cnct=sqlite3.connect("gst.db")
         return cnct
     except Error:
         print(Error)
@@ -113,47 +113,44 @@ def insert_brons(itms,table):
         con=connectDB()
         crs=con.cursor()
         slv_kl=cbx_selectklts()
-        nm_cl=str(itms[1].get())
-        for key in slv_kl.keys:
-            if nm_cl==slv_kl[key]:
-                id_kl=key
         slv_room=cbx_selectnmrs()
-        nm_rm=str(itms[0].get())
-        for key in slv_room.keys:
+        nm_rm=int(itms[0].get())
+        for key in slv_room.keys():
             if nm_rm==slv_room[key]:
                 id_rm=key
-        crs.execute("INSERT INTO resrvd(id_room,id_client,date_chckin,date_evict) VALUES(?,?,?, ?)",(id_rm,id_kl,datetime(itms[2].get()),datetime(itms[3].get()),))
+        nm_cl=str(itms[1].get())
+        for key in slv_kl.keys():
+            if nm_cl==slv_kl[key]:
+                id_kl=key
+        crs.execute("INSERT INTO resrvd(id_client,date_chckin,date_evict,id_room) VALUES(?,?,?,?)",(id_kl,itms[2].get(),itms[3].get(),id_rm))
         con.commit()  
         con.close()
         view_tab_rec_bron(table)
     return ins_bron  
 
 def insert_okusls(itms,table): 
-    def ins_bron():
+    def ins_okusl():
         con=connectDB()
         crs=con.cursor()
         slv_kl=cbx_selectklts()
         nm_cl=str(itms[1].get())
-        for key in slv_kl.keys:
+        for key in slv_kl.keys():
             if nm_cl==slv_kl[key]:
                 id_kl=key
         slv_uslgs=cbx_selectuslgs()
         nm_usl=str(itms[0].get())
-        for key in slv_uslgs.keys:
+        for key in slv_uslgs.keys():
             if nm_usl==slv_uslgs[key]:
                 id_usl=key
-        crs.execute("Select price from usluga WHERE id_usluga=?",(id_usl,))
+        crs.execute("Select price from uslugs WHERE id_usluga=?",(id_usl,))
         price=crs.fetchone()
-        prc=price[0]*int(itms[3].get())
-        print(price[0])
-        print(prc)
-        print(itms[3].get())
-        print(date(itms[3].get()))
-        crs.execute("INSERT INTO ispolz_uslug(id_usluga,id_client,date_usg,kol_vo,price) VALUES(?,?,?,?,?)",(id_usl,id_kl,date(itms[2].get()),int(itms[3].get()),prc))
+        kol=int(itms[2].get())
+        prc=float(price[0])*kol
+        crs.execute("INSERT INTO ispolz_uslug(id_usluga,id_client,date_usg,kol_vo,price) VALUES(?,?,?,?,?)",(int(id_usl),int(id_kl),itms[3].get(),kol,prc))
         con.commit()  
         con.close()
-        view_tab_rec_bron(table)
-    return ins_bron  
+        view_tab_rec_okuslgs(table)
+    return ins_okusl  
 
 def insert_rooms(itms,table): 
     def ins_room():
@@ -166,8 +163,6 @@ def insert_rooms(itms,table):
                 id_trm=key
         crs.execute("Select price from type_room WHERE id_type=?",(id_trm,))
         prc=crs.fetchone()
-        print(prc[0])
-        print (id_trm)
         crs.execute("INSERT INTO rooms(id_type_room,nmb_room) VALUES(?,?)",(id_trm,str(itms[1].get()),))
         con.commit()  
         con.close()
@@ -241,7 +236,17 @@ def delete_bron(table):
             curItem = table.focus()
             contents =(table.item(curItem))
             selecteditem = contents['values']
-            crs.execute("DELETE FROM nmb_room WHERE rooms.nmb_room=?",(selecteditem[0],))
+            slv_kl=cbx_selectklts()
+            slv_room=cbx_selectnmrs()
+            nm_rm=int(itms[0].get())
+            for key in slv_room.keys():
+                if nm_rm==slv_room[key]:
+                    id_rm=key
+            nm_cl=str(itms[1].get())
+            for key in slv_kl.keys():
+                if nm_cl==slv_kl[key]:
+                    id_kl=key
+            crs.execute("DELETE FROM resrvd WHERE id_client=? and date_chckin=? and date_evict=? and id_room=?",(id_kl,selecteditem[2],selecteditem[3],id_rm))
             con.commit()
             con.close()    
         else:
@@ -253,6 +258,37 @@ def view_tab_rec_bron(table):
     crs.execute("SELECT rooms.nmb_room,client.FIO,resrvd.date_chckin,resrvd.date_evict FROM rooms,client,resrvd WHERE client.id_klient=resrvd.id_client and rooms.id_room=resrvd.id_room") 
     [table.delete(i) for i in table.get_children()] 
     [table.insert('','end',values=row) for row in crs.fetchall()]  
+def update_bron(itms,table):
+    def upd_brn():
+        if table.selection():
+            con=connectDB()
+            crs=con.cursor()
+            curItem = table.focus()
+            contents =(table.item(curItem))
+            selecteditem = contents['values']
+            slv_kl=cbx_selectklts()
+            slv_room=cbx_selectnmrs()
+            nm_rm=int(itms[0].get())
+            nm_rmsel=int(selecteditem[0])
+            for key in slv_room.keys():
+                if nm_rm==slv_room[key]:
+                    id_rm=key
+                if nm_rmsel==slv_room[key]:
+                    id_rmsel=key
+            nm_cl=str(itms[1].get())
+            nm_clsel=str(selecteditem[1])
+            for key in slv_kl.keys():
+                if nm_cl==slv_kl[key]:
+                    id_kl=key
+                if nm_clsel==slv_kl[key]:
+                    id_clsel=key
+            crs.execute("UPDATE resrvd SET id_client=?,date_chckin=?,date_evict=?,id_room=? WHERE id_client=? and date_chckin=? and date_evict=? and id_room=?",(id_kl,itms[2].get(),itms[3].get(),id_rm,id_clsel,selecteditem[2],selecteditem[3],id_rmsel))
+            con.commit()
+            con.close() 
+            view_tab_rec_bron(table)   
+        else:
+            mb.showerror('Ошибка','Не выделена запись')
+    return upd_brn
 
 def update_clnt(table,itms):
     def upd_cl():
@@ -278,10 +314,10 @@ def update_trooms(table,itms):
             curItem = table.focus()
             contents =(table.item(curItem))
             selecteditem = contents['values']
-            crs.execute("UPDATE trooms SET t_room=?,kolvo_mest=?,price=? WHERE FIO=(?)",(str(itms[0].get()),str(itms[1].get()),float(itms[2].get()),selecteditem[0],))
+            crs.execute("UPDATE trooms SET t_room=?,kolvo_mest=?,price=? WHERE t_room=(?)",(str(itms[0].get()),str(itms[1].get()),float(itms[2].get()),selecteditem[0]))
             con.commit()
             con.close()
-            view_tab_rec_kli(table)
+            view_tab_rec_trooms(table)
         else:
             mb.showerror('Ошибка','Не выделена запись')
     return upd_trm
@@ -296,7 +332,7 @@ def update_uslgs(table,itms):
             crs.execute("UPDATE uslugs SET name_usluga,ed_izm,price WHERE FIO=(?)",(str(itms[0].get()),str(itms[1].get()),str(itms[2].get()),selecteditem[0],))
             con.commit()
             con.close()
-            view_tab_rec_kli(table)
+            view_tab_rec_uslgs(table)
         else:
             mb.showerror('Ошибка','Не выделена запись')
     return upd_usl
@@ -318,6 +354,32 @@ def delete_clnt(table):
         else:
             mb.showerror('Ошибка','Не выделена запись')
     return del_cl
+
+def update_nmb(itms,table):
+    def upd_nmb():
+        if table.selection():
+            con=connectDB()
+            crs=con.cursor()
+            curItem = table.focus()
+            contents =(table.item(curItem))
+            selecteditem = contents['values']
+            slv_troom=cbx_tpnmrs()
+            nm_trm=str(itms[0].get())
+            nm_trm_sel=str(selecteditem[0])
+            for key in slv_troom.keys():
+                if nm_trm==slv_troom[key]:
+                    id_trm=key
+                if nm_trm_sel==slv_troom[key]:
+                    id_trm_sel=key
+            crs.execute("Select price from type_room WHERE id_type=?",(id_trm,))
+            prc=crs.fetchone()
+            crs.execute("UPDATE rooms SET id_type_room=?,nmb_room=? WHERE id_type_room=? and nmb_room=?",(id_trm,itms[1].get(),id_trm_sel,selecteditem[1]))
+            con.commit()
+            con.close()
+            view_tab_rec_rooms(table)    
+        else:
+            mb.showerror('Ошибка','Не выделена запись')
+    return upd_nmb
 
 def delete_nmb(table):
     def del_nmb():
@@ -377,7 +439,17 @@ def delete_okusl(table):
             contents =(table.item(curItem))
             selecteditem = contents['values']
             table.delete(curItem)
-            crs.execute("DELETE FROM okusl WHERE uslugs.name_usluga=(?)",(selecteditem[0],))
+            slv_kl=cbx_selectklts()
+            nm_cl=str(selecteditem[1])
+            for key in slv_kl.keys():
+                if nm_cl==slv_kl[key]:
+                    id_kl=key
+            slv_uslgs=cbx_selectuslgs()
+            nm_usl=str(selecteditem[0])
+            for key in slv_uslgs.keys():
+                if nm_usl==slv_uslgs[key]:
+                    id_usl=key
+            crs.execute("DELETE FROM ispolz_uslug WHERE id_usluga=? and id_client=? and kol_vo=? and date_usg=? and price=?",(id_usl,id_kl,selecteditem[2],selecteditem[3],selecteditem[4]))
             con.commit()
             con.close()
             
