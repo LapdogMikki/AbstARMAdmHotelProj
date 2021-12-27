@@ -58,7 +58,9 @@ class MFormTabFrame(tkntr.Frame):
         curItem = self.table.focus()
         contents =(self.table.item(curItem))
         selecteditem = contents['values']
-        for i in range(0,len(selecteditem)):
+        if ((self.tid==2) | (self.tid==5)):ln=len(selecteditem)-1
+        else:ln=len(selecteditem)
+        for i in range(0,ln):
             self.itms[i].insert(0,selecteditem[i])
     def initUI(self):
         self.pack(fill=tkntr.BOTH,expand=1) 
